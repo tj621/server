@@ -1,4 +1,3 @@
-# coding=utf-8
 import json
 from CONTROL_CONSTANT import CONTROL_CONSTANT
 
@@ -7,10 +6,10 @@ class ControlCommand():
 
     CONSTANT = CONTROL_CONSTANT()
 
-    def __init__(self):
+    def __init__(self, actutator=1, cmd=0):
         self.__update_time = '2016/07/21 00:00:00'
-        self.__actuator = 'roof_vent_south'
-        self.__command = 'stop'
+        self.__actutator = actutator
+        self.__command = cmd
 
     def get_update_time(self):
         return self.__update_time
@@ -18,11 +17,11 @@ class ControlCommand():
     def set_update_time(self, value):
         self.__update_time = value
 
-    def get_actuator(self):
-        return self.__actuator
+    def get_actutator(self):
+        return self.__actutator
 
-    def set_actuator(self, value):
-        self.__actuator = value
+    def set_actutator(self, value):
+        self.__actutator = value
 
     def get_command(self):
         return self.__command
@@ -30,14 +29,14 @@ class ControlCommand():
     def set_command(self, value):
         self.__command = value
 
-    def get_actuator_number(self, key):
-        return ControlCommand.CONSTANT.control_actuator_number.get(key)
+    def get_actutator_number(self, key):
+        return ControlCommand.CONSTANT.control_actutator_number.get(key)
 
-    def get_actuator_name(self, value):
-        for key in ControlCommand.CONSTANT.actuator:
-            if ControlCommand.CONSTANT.control_actuator_number.get(key) == value:
+    def get_actutator_name(self, value):
+        for key in ControlCommand.CONSTANT.actutator:
+            if ControlCommand.CONSTANT.control_actutator_number.get(key) == value:
                 return key
-        print 'actuator number value error'
+        print 'actutator number value error'
 
     def get_cmd_number(self, key):
         if key in ControlCommand.CONSTANT.tri_states:
@@ -59,47 +58,33 @@ class ControlCommand():
                     return key
         print 'cmd number value error'
 
-    def handle_post(self, data,isNumber=True):
+    def handle_post(self, data):
         obj = json.loads(data)
         keys = obj.keys()
+        # temp = []
         for key in keys:
-            if isNumber:
-                self.set_actuator(ControlCommand.CONSTANT.control_actuator_number.get(key))
-                if key in ControlCommand.CONSTANT.tri_states_actuators:
-                    value = obj.get(key)
-                    if value in ControlCommand.CONSTANT.tri_states:
-                        self.set_command(ControlCommand.CONSTANT.tri_states_control_cmd.get(value))
-                    else:
-                        print value, "illegal state"
-                elif key in ControlCommand.CONSTANT.bi_states_actuators:
-                    value = obj.get(key)
-                    if value in ControlCommand.CONSTANT.bi_states:
-                        self.set_command(ControlCommand.CONSTANT.bi_states_control_cmd.get(value))
-                    else:
-                        print value, "illegal state"
+            self.set_actutator(ControlCommand.CONSTANT.control_actutator_number.get(key))
+            if key in ControlCommand.CONSTANT.tri_states_actuators:
+                value = obj.get(key)
+                if value in ControlCommand.CONSTANT.tri_states:
+                    self.set_command(ControlCommand.CONSTANT.tri_states_control_cmd.get(value))
                 else:
-                    print key, "illegal actuator"
+                    print value, "illegal state"
+            elif key in ControlCommand.CONSTANT.bi_states_actuators:
+                value = obj.get(key)
+                if value in ControlCommand.CONSTANT.bi_states:
+                    self.set_command(ControlCommand.CONSTANT.bi_states_control_cmd.get(value))
+                else:
+                    print value, "illegal state"
             else:
-                self.set_actuator(key)
-                self.set_command(obj.get(key))
-    def build_json(self):
-        return '''
-                {
-                  "update_time":"%s",
-                  "actuator":"%s",
-                  "command":"%s"
-                }
-        '''%(self.__update_time,self.__actuator,self.__command)
-    def build_control_command(self):
-        return '''
-                {
-                  "%s":"%s"
-                }
-        ''' % (self.__actuator, self.__command)
+                print key, "illegal actuator"
+            # temp.append(self.get_actutator, self.get_command)
+            # return temp
+
 
 if __name__ == '__main__':
     c = ControlCommand()
-    print c.get_actuator_name('1')
-    print c.get_actuator_number('roof_vent_south')
+    print c.get_actutator_name('1')
+    print c.get_actutator_number('roof_vent_south')
     print c.get_cmd_number('on')
     print c.get_cmd_status('1')

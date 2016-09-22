@@ -1,5 +1,3 @@
-# coding=utf-8
-
 class Indoor:
     '''the object of indoor climate'''
 

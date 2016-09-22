@@ -1,4 +1,3 @@
-# coding=utf-8
 import json
 from currenttime import get_current_time
 from CONTROL_CONSTANT import CONTROL_CONSTANT
@@ -9,22 +8,20 @@ class Control(object):
     CONSTANT = CONTROL_CONSTANT()
     def __init__(self):
         self.__update_time = "2016/07/27 22:08:00"
-        self.__roof_vent_south = "stop"
-        self.__roof_vent_north = "stop"
-        self.__side_vent = "stop"
-        self.__shade_screen_out = "stop"
-        self.__shade_screen_in = "stop"
-        self.__thermal_screen = "stop"
-
-        self.__cooling_pump = "off"
-        self.__cooling_fan = "off"
-        self.__fan = "off"
-        self.__fogging = "off"
-        self.__heating = "off"
-        self.__co2 = "off"
-        self.__lighting_1 = "off"
-        self.__lighting_2 = "off"
-        self.__irrigation = "off"
+        self.__roof_vent_south = 'on'
+        self.__roof_vent_north = 'on'
+        self.__side_vent = 'on'
+        self.__shade_screen_north = 'on'
+        self.__shade_screen_south = 'on'
+        self.__thermal_screen = 'on'
+        self.__cooling_pump = 'on'
+        self.__cooling_fan = 'on'
+        self.__fan = 'on'
+        self.__fogging = 'on'
+        self.__heating = 'on'
+        self.__co2 = 'on'
+        self.__lighting_1 = 'on'
+        self.__lighting_2 = 'on'
 
     def get_roof_vent_south(self):
         return self.__roof_vent_south
@@ -38,12 +35,12 @@ class Control(object):
         return self.__side_vent
 
 
-    def get_shade_screen_out(self):
-        return self.__shade_screen_out
+    def get_shade_screen_north(self):
+        return self.__shade_screen_north
 
 
-    def get_shade_screen_in(self):
-        return self.__shade_screen_in
+    def get_shade_screen_south(self):
+        return self.__shade_screen_south
 
 
     def get_thermal_screen(self):
@@ -81,6 +78,15 @@ class Control(object):
     def get_lighting_2(self):
         return self.__lighting_2
 
+
+    def get_shade_screen_out(self):
+        return self.__shade_screen_out
+
+
+    def get_shade_screen_in(self):
+        return self.__shade_screen_in
+
+
     def get_irrigation(self):
         return self.__irrigation
 
@@ -102,12 +108,12 @@ class Control(object):
         self.__side_vent = value
 
 
-    def set_shade_screen_out(self, value):
-        self.__shade_screen_out = value
+    def set_shade_screen_north(self, value):
+        self.__shade_screen_north = value
 
 
-    def set_shade_screen_in(self, value):
-        self.__shade_screen_in = value
+    def set_shade_screen_south(self, value):
+        self.__shade_screen_south = value
 
 
     def set_thermal_screen(self, value):
@@ -143,9 +149,6 @@ class Control(object):
 
     def set_lighting_2(self, value):
         self.__lighting_2 = value
-
-    def set_irrigation(self, value):
-        self.__irrigation = value
 
     def handle_post(self, data):
         obj = json.loads(data)
@@ -184,20 +187,19 @@ class Control(object):
                 "roof_vent_south": "%s",
                 "roof_vent_north": "%s",
                 "side_vent": "%s",
-                "shade_screen_out": "%s",
-                "shade_screen_in": "%s",
+                "shade_screen_north": "%s",
+                "shade_screen_south": "%s",
                 "thermal_screen": "%s"
             },
             "bi_state": {
                 "cooling_pump": "%s",
-                "cooling_fan":"%s"
-                "fan":"%s"
-                "fogging":"%s",
+                "cooling_fan":"%s",
+                "fan":"%s",
+                "fogging": "%s",
                 "heating": "%s",
                 "co2": "%s",
                 "lighting_1": "%s",
-                "lighting_2": "%s",
-                "irrigation": "%s"
+                "lighting_2": "%s"
                     }
                 }
             }''' \
@@ -205,8 +207,8 @@ class Control(object):
                     self.__roof_vent_south,
                     self.__roof_vent_north,
                     self.__side_vent,
-                    self.__shade_screen_out,
-                    self.__shade_screen_in,
+                    self.__shade_screen_north,
+                    self.__shade_screen_south,
                     self.__thermal_screen,
                     self.__cooling_pump,
                     self.__cooling_fan,
@@ -215,8 +217,7 @@ class Control(object):
                     self.__heating,
                     self.__co2,
                     self.__lighting_1,
-                    self.__lighting_2,
-                    self.__irrigation
+                    self.__lighting_2
         )
 
 

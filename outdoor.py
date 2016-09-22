@@ -25,6 +25,9 @@ class Outdoor(object):
         value = self.get_wind_direction()
         keys = self.wind_direction_data.keys()
         for key in keys:
+            print type(self.wind_direction_data[key])
+            print type(value)
+
             if self.wind_direction_data[key]==value:
                 self.set_wind_direction(key)
 
@@ -154,14 +157,14 @@ class Outdoor(object):
         radiation = '300'
         co2 = '600'
         wind_direction = wea_json['now']['wind']['dir']
-        wind_speed = '%.1f' % (float(wea_json['now']['wind']['spd']) / 3.6)
+        wind_speed = str(wea_json['now']['wind']['spd'])
         rain = wea_json['now']['pcpn']
         # if (float(rain)) > 1.0:
-        #    rain = 'true'  # raining
-        #else:
-        #    rain = 'false'  # no rain
+        #     rain = 'true'  # raining
+        # else:
+        #     rain = 'false'  # no rain
         atmosphere = str(wea_json['now']['pres'])
-        self.set_outdoor(update_time, temperature, humidity, radiation, co2, wind_direction, wind_speed, rain,
+        self.set_outdoor(update_time, temperature, humidity, radiation, co2, wind_direction, wind_speed, int(rain),
                          atmosphere)
 
 
