@@ -7,7 +7,7 @@ class Control(object):
 
     CONSTANT = CONTROL_CONSTANT()
     def __init__(self):
-        self.__update_time = "2016/07/27 22:08:00"
+        self.__update_time = "2016/07027 22:08:00"
         self.__roof_vent_south = 'on'
         self.__roof_vent_north = 'on'
         self.__side_vent = 'on'
@@ -217,7 +217,7 @@ class Control(object):
                     self.__heating,
                     self.__co2,
                     self.__lighting_1,
-                    self.__lighting_2
+                    self.__lighting_2,
         )
 
 

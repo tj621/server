@@ -18,29 +18,26 @@ class Outdoor(object):
         "34":u"西北风"
     }
 
-    def get_db_wind_direction(self, key):
-        return self.wind_direction_data.get(key)
+    def get_db_wind_direction(self, value):
+        return self.wind_direction_data.get(value)
 
     def set_wind_direction_number(self):
         value = self.get_wind_direction()
         keys = self.wind_direction_data.keys()
         for key in keys:
-            print type(self.wind_direction_data[key])
-            print type(value)
-
             if self.wind_direction_data[key]==value:
                 self.set_wind_direction(key)
 
     def __init__(self):
         self.__update_time = "just now"
-        self.__temperature = 10.0
-        self.__humidity = 5
-        self.__radiation = 600
-        self.__co2 = 600
-        self.__wind_direction = "12"
-        self.__wind_speed = 3
-        self.__rain = 1
-        self.__atmosphere = 0
+        self.__temperature = "10"
+        self.__humidity = "5"
+        self.__radiation = "300"
+        self.__co2 = "600"
+        self.__wind_direction = "6"
+        self.__wind_speed = "3"
+        self.__rain = "1"
+        self.__atmosphere = "0"
 
     def get_update_time(self):
         return self.__update_time
@@ -157,14 +154,14 @@ class Outdoor(object):
         radiation = '300'
         co2 = '600'
         wind_direction = wea_json['now']['wind']['dir']
-        wind_speed = str(wea_json['now']['wind']['spd'])
+        wind_speed = '%.1f' % (float(wea_json['now']['wind']['spd'])/3.6)
         rain = wea_json['now']['pcpn']
-        # if (float(rain)) > 1.0:
-        #     rain = 'true'  # raining
-        # else:
-        #     rain = 'false'  # no rain
+        #if (float(rain)) > 1.0:
+        #    rain = 'true'  # raining
+        #else:
+        #    rain = 'false'  # no rain
         atmosphere = str(wea_json['now']['pres'])
-        self.set_outdoor(update_time, temperature, humidity, radiation, co2, wind_direction, wind_speed, int(rain),
+        self.set_outdoor(update_time, temperature, humidity, radiation, co2, wind_direction, wind_speed, rain,
                          atmosphere)
 
 
@@ -174,3 +171,5 @@ if __name__ == '__main__':
     a.get_weather_from_api()
     print a.build_json()
     print a.get_wind_speed()
+    #print a.build_json()
+    #print a.get_wind_speed()

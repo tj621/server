@@ -1,6 +1,4 @@
 import time
-import datetime
-
 from scheduler import Scheduler
 
 
@@ -42,22 +40,19 @@ def stamp_to_time(timeStamp):
     return otherStyleTime
 
 def stamp_for_series_start_time(time_value):
-    # time_value += ' 00:00:00'
+    #time_value += ' 08:00:00'
     temp = str(int(make_time_stamp(time_value))+8*3600)
-    return temp+'000'
+    return int(temp+'000')
 
 if __name__ == '__main__':
-    a="2016-8-23 00:00:00"
+    a="2016-8-23"
     print  stamp_for_series_start_time(a)
-    print stamp_to_time(1471910400)
-    # print make_time(a,0)
-    # print time.time("2016-7-23")
-    # print get_current_time()
-    # time.sleep(5)
-    # print get_current_time()
-    # while(1):
-    #     time.sleep(5)
-    #     print get_current_time()
+    print get_current_time()
+    time.sleep(5)
+    print get_current_time()
+    while(1):
+        time.sleep(5)
+        print get_current_time()
     # print time.time()
     # print time.localtime(time.time())
     # print get_current_month()

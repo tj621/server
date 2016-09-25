@@ -4,12 +4,11 @@
 '''
 from flask import Flask, g
 import MySQLdb
-from currenttime import get_current_time,make_time,stamp_for_series_start_time
+from currenttime import get_current_time ,make_time, stamp_for_series_start_time
 from indoor import Indoor
 from outdoor import Outdoor
 from control import Control
 import json
-
 
 app = Flask(__name__)
 
@@ -24,7 +23,7 @@ control_command_database = 'control_command'
 
 def connect_db():
     """Connects to the specific database."""
-    db = MySQLdb.connect(host="localhost", user="root", passwd="root", db="greenhouse")
+    db = MySQLdb.connect(host="localhost", user="root", passwd="xujiahui", db="kunshangreenhouse")
     db.autocommit(True)
     return db
 
@@ -79,7 +78,7 @@ def get_db_indoor(Indoor):
     Indoor.set_temperature(row[3])
     Indoor.set_humidity(row[4])
     Indoor.set_radiation(row[6])
-    Indoor.set_co2(row[6])
+    Indoor.set_co2(row[5])
 
 
 #    return Indoor.build_json()
@@ -95,6 +94,8 @@ def save_db_outdoor(Outdoor):
                              Outdoor.get_wind_direction(), Outdoor.get_wind_speed(), Outdoor.get_rain(),
                              Outdoor.get_atmosphere()])
         db.commit()
+        db.cursor().close()
+        db.close()
     print 'outdoor save success'
 
 
@@ -152,7 +153,8 @@ def get_db_control_state(Control):
     Control.set_lighting_2(row[15])
 
 
-#get one row
+#    return Outdoor.build_json()
+
 def query_db(query, args=(), one=False):
     with app.app_context():
         cur = get_db().cursor()
@@ -163,7 +165,6 @@ def query_db(query, args=(), one=False):
         get_db().close()
         return result
 
-#get all rows
 def query_db_2(query, args=(), one=False):
     with app.app_context():
         cur = get_db().cursor()
@@ -174,8 +175,6 @@ def query_db_2(query, args=(), one=False):
         get_db().close()
         return result
 
-#get property column number
-
 
 def handle_query_condition(request_data):
     obj = json.loads(request_data)
@@ -184,18 +183,19 @@ def handle_query_condition(request_data):
     end_time=make_time(obj.get('stop'),1)
     if(end_time>get_current_time()):
         end_time=get_current_time()
-    response_data='''{"series":['''
+    response_data='''{"series":[ '''
     for key in keys:
         value=obj.get(key)
-        if(value=='true'):
+        if(value==True):
             data=key.split('_')
-            if(data[0][1]=='n'):
+            if(data[0][0]=='n'):
                 sheet_name = 'indoor_node_'+data[0][4]
-            else: sheet_name = 'outdoor'
+            else:
+                sheet_name =' outdoor'
             sheet_title = "update_time,"+data[1]
             query = "SELECT "+sheet_title+" FROM " +sheet_name+ " WHERE update_time BETWEEN "+"'" +start_time+"'" +" AND "+"'" +end_time+"'"
             rows = query_db_2(query)
-            data='''['''
+            data='''[  '''
             for row in rows:
                 temp ='''[%s,%s]'''% (stamp_for_series_start_time(str(row[0])),float(row[1]))
                 data += temp
@@ -203,83 +203,39 @@ def handle_query_condition(request_data):
             data_list=list(data)
             data_list.pop()
             data = "".join(data_list)
-            data = "]"
+            data += "]"
             response_data += '''{
                 "name":"%s",
-                "data":%s,
-                "pointStart":%s,
-                "pointInterval": "5 * 60 * 1000"
-                },
-                ''' % (key,data,stamp_for_series_start_time(start_time))
-    response_data+='''{}
+                "data":%s
+                },''' % (key,data)
+    str_list=list(response_data)
+    str_list.pop()
+    response_data="".join(str_list)
+    response_data+='''
                     ]}'''
     return response_data
-
-# def get_db_actutor_current_state():
-#     #global c,co
-#     query = 'select * from in_state where id=(select max(id) from in_state)'
-#     a = query_db(query)
-#     row =[]
-#     for i in a:
-#         row.append(i)
-#     print row
-#     return '''
-#     {
-#         "update_time": "%s",
-#         "actuator": {
-#             "tri_state": {
-#                 "roof_vent_south": "%s",
-#                 "roof_vent_north": "%s",
-#                 "side_vent": "%s",
-#                 "shade_screen_north": "%s",
-#                 "shade_screen_south": "%s",
-#                 "thermal_screen": "%s"
-#             },
-#             "bi_state": {
-#                 "cooling_pump": "%s",
-#                 "cooling_fan": "%s",
-#                 "fan": "%s",
-#                 "fogging": "%s",
-#                 "heating": "%s",
-#                 "co2": "%s",
-#                 "lighting_1": "%s",
-#                 "lighting_2": "%s"
-#             }
-#         }
-#     }
-#     '''%(row[1],row[2],row[3],row[4],row[5],row[6],row[7],row[8],row[8],row[9],row[10],row[11],row[12],row[13],row[14],row[15])
-
 
 
 if __name__ == '__main__':
     print 'test start'
-    indoor = Indoor('2')
+    indoor = Indoor('1')
     outdoor = Outdoor()
     control = Control()
-    # print get_db_actutor_current_state()
-    #d='''{"outdoor_radiation": "true","start": "2016-06-17",
-    #"stop": "2016-08-22"}'''
-    #print handle_query_condition(d)
     outdoor.get_weather_from_api()
     #save_db_outdoor(outdoor)
-    # print outdoor.build_json()
-    # temperature, humidity, radiation, co2, wind_direction, wind_speed, rain_snow,atmosphere
-    print outdoor.get_wind_direction()
+    outdoor.get_weather_from_api()
     outdoor.set_wind_direction_number()
-    print outdoor.get_wind_direction()
-    # print outdoor.get_rain()
-    with app.app_context():
-        db = get_db()
-        db.cursor().execute('insert into outdoor(wind_direction)\
-                   values(%s)',
-                            [outdoor.get_wind_direction()])
-        db.commit()
+    save_db_outdoor(outdoor)
+    get_db_outdoor(outdoor)
+    #d='''{"outdoor_radiation": true,"start": "2016-06-17",
+	#"stop": "2016-08-22"}'''
+    #print handle_query_condition(d)
     # query = 'select * from control_state where id=(select max(id) from control_state)'
     # query_db(query)
-    # get_db_control_state(control)
-    # print control.build_json()
-    # get_db_indoor(indoor)
-    # print indoor.build_json()
+    #get_db_control_state(control)
+    #print control.build_json()
+    #get_db_indoor(indoor)
+    #print indoor.build_json()
     # get_db_outdoor(outdoor)
     # print outdoor.build_json()
     # save_db_control_state(control)
