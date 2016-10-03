@@ -155,6 +155,7 @@ def web_control():
 
 if __name__ == '__main__':
     app.run('0.0.0.0', 8050, threaded=True)
+    web_control=False
     # scheduler1.stop()
     # scheduler2.stop()
     # scheduler3.stop()

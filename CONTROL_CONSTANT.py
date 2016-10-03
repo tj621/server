@@ -1,10 +1,10 @@
 # coding=utf-8
 class CONTROL_CONSTANT():
-    tri_states_actuators = ("roof_vent_south", "roof_vent_north", "side_vent", "shade_screen_out",
-                            "shade_screen_in", "thermal_screen")
+    tri_states_actuators = ("roof_vent_south", "roof_vent_north", "side_vent", "shade_screen_north",
+                            "shade_screen_south", "thermal_screen")
     bi_states_actuators = ("fan","cooling_pump", "cooling_pad", "fogging", "heating", "co2", "lighting_1", "lighting_2", "irrigation")
 
-    actuator = ("roof_vent_south", "roof_vent_north", "side_vent", "shade_screen_out","shade_screen_in", "thermal_screen",
+    actuator = ("roof_vent_south", "roof_vent_north", "side_vent", "shade_screen_north","shade_screen_south", "thermal_screen",
                  "fan","cooling_pump", "cooling_pad", "fogging", "heating", "co2", "lighting_1", "lighting_2", "irrigation")
 
     tri_states = ("on", "off", "stop")
@@ -15,8 +15,8 @@ class CONTROL_CONSTANT():
         'roof_vent_south': '1',
         'roof_vent_north': '2',
         'side_vent': '3',
-        'shade_screen_out': '4',
-        'shade_screen_in': '5',
+        'shade_screen_north': '4',
+        'shade_screen_south': '5',
         'thermal_screen': '6',
         'cooling_fan': '9',
         'cooling_pump': '10',

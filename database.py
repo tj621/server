@@ -133,11 +133,11 @@ def get_db_outdoor(Outdoor):
 def save_db_control_state(Control):
     with app.app_context():
         db = get_db()
-        db.cursor().execute('insert into control_state(update_time,roof_vent_south,roof_vent_north,side_vent,shade_screen_out,shade_screen_in,thermal_screen,\
+        db.cursor().execute('insert into control_state(update_time,roof_vent_south,roof_vent_north,side_vent,shade_screen_north,shade_screen_south,thermal_screen,\
         cooling_pump,cooling_fan,fan,fogging,heating,co2,lighting_1,lighting_2,irrigation) values(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)',
                             [get_current_time(), Control.get_roof_vent_south(), Control.get_roof_vent_north(),
-                             Control.get_side_vent(), Control.get_shade_screen_out(),
-                             Control.get_shade_screen_in(), Control.get_thermal_screen(),
+                             Control.get_side_vent(), Control.get_shade_screen_north(),
+                             Control.get_shade_screen_south(), Control.get_thermal_screen(),
                              Control.get_cooling_pump(), Control.get_cooling_fan(), Control.get_fan(),
                              Control.get_fogging(),
                              Control.get_heating(), Control.get_co2(), Control.get_lighting_1(),
@@ -155,8 +155,8 @@ def get_db_control_state(Control):
     Control.set_roof_vent_south(row[2])
     Control.set_roof_vent_north(row[3])
     Control.set_side_vent(row[4])
-    Control.set_shade_screen_out(row[5])
-    Control.set_shade_screen_in(row[6])
+    Control.set_shade_screen_north(row[5])
+    Control.set_shade_screen_south(row[6])
     Control.set_thermal_screen(row[7])
     Control.set_cooling_pump(row[8])
     Control.set_cooling_fan(row[9])
@@ -224,7 +224,7 @@ def handle_outdoor_data(request_data):
             db.commit()
         db.cursor().close()
         db.close()
-    print 'indoor data save success  '+get_current_time()
+    print 'outdoor data save success  '+get_current_time()
 
 
 
@@ -271,10 +271,10 @@ def handle_query_condition(request_data):
 
 if __name__ == '__main__':
     print 'test start'
-    init_db('greenhouse1')
+    init_db()
     # indoor = Indoor('2')
     # outdoor = Outdoor()
-    # control = Control()
+    control = Control()
     # command=ControlCommand()
     # save_db_control_command(command)
     # get_db_control_command(command)
@@ -305,7 +305,9 @@ if __name__ == '__main__':
     # print indoor.build_json()
     # get_db_outdoor(outdoor)
     # print outdoor.build_json()
-    # save_db_control_state(control)
+    save_db_control_state(control)
+    get_db_control_state(control)
+    print control.build_json()
     # save_db_indoor(indoor)
     # save_db_outdoor(outdoor)
     # init_db()

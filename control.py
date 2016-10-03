@@ -12,8 +12,8 @@ class Control(object):
         self.__roof_vent_south = "stop"
         self.__roof_vent_north = "stop"
         self.__side_vent = "stop"
-        self.__shade_screen_out = "stop"
-        self.__shade_screen_in = "stop"
+        self.__shade_screen_north = "stop"
+        self.__shade_screen_south = "stop"
         self.__thermal_screen = "stop"
 
         self.__cooling_pump = "off"
@@ -38,12 +38,12 @@ class Control(object):
         return self.__side_vent
 
 
-    def get_shade_screen_out(self):
-        return self.__shade_screen_out
+    def get_shade_screen_north(self):
+        return self.__shade_screen_north
 
 
-    def get_shade_screen_in(self):
-        return self.__shade_screen_in
+    def get_shade_screen_south(self):
+        return self.__shade_screen_south
 
 
     def get_thermal_screen(self):
@@ -102,12 +102,12 @@ class Control(object):
         self.__side_vent = value
 
 
-    def set_shade_screen_out(self, value):
-        self.__shade_screen_out = value
+    def set_shade_screen_north(self, value):
+        self.__shade_screen_north = value
 
 
-    def set_shade_screen_in(self, value):
-        self.__shade_screen_in = value
+    def set_shade_screen_south(self, value):
+        self.__shade_screen_south = value
 
 
     def set_thermal_screen(self, value):
@@ -184,8 +184,8 @@ class Control(object):
                 "roof_vent_south": "%s",
                 "roof_vent_north": "%s",
                 "side_vent": "%s",
-                "shade_screen_out": "%s",
-                "shade_screen_in": "%s",
+                "shade_screen_north": "%s",
+                "shade_screen_south": "%s",
                 "thermal_screen": "%s"
             },
             "bi_state": {
@@ -205,8 +205,8 @@ class Control(object):
                     self.__roof_vent_south,
                     self.__roof_vent_north,
                     self.__side_vent,
-                    self.__shade_screen_out,
-                    self.__shade_screen_in,
+                    self.__shade_screen_north,
+                    self.__shade_screen_south,
                     self.__thermal_screen,
                     self.__cooling_pump,
                     self.__cooling_fan,
