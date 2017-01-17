@@ -21,7 +21,7 @@ control = Control()
 indoor = Indoor()
 command = ControlCommand()
 indoor_all_state = ''
-web_control=False
+web_control = False
 
 
 def update_indoor():
@@ -58,9 +58,11 @@ scheduler1.start()
 scheduler2.start()
 # scheduler3.start()
 
+
 @app.route('/')
 def arm_connect():
     return 'success'
+
 
 @app.route('/indoor', methods=['GET', 'POST'])
 def indoor_response():
@@ -143,6 +145,7 @@ def control_response():
         rsp.headers['Access-Control-Allow-Methods'] = 'GET,POST,OPTIONS'
         rsp.headers['Access-Control-Allow-Headers'] = 'X-Requested-With, Content-Type'
         return rsp
+
 
 @app.route('/webControl')
 def web_control():
